@@ -2,7 +2,7 @@ import requests
 
 
 def askAI(ques: str) -> str:
-    Api_Key = "fastgpt-zvwtQtohOe6zIPKZpZX5Y70Ddf6aD9k4EjF3o2NA1hVqF8lFEJtwm8M6J"
+    Api_Key = ""
     url = "https://api.fastgpt.in/api/v1/chat/completions"
     headers = {
             "Authorization": "Bearer " + Api_Key,
