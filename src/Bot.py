@@ -1,10 +1,3 @@
-# -*- coding:utf-8 -*-
-# @author  : 勾勾
-# @time    : ${DATE} ${TIME}
-# @function: 群机器人
-# @version : V1
-
-
 import asyncio
 import queue
 import threading
