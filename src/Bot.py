@@ -9,8 +9,10 @@ import requests
 # 功能模块
 from methods.runPy import runPython
 from methods.askAI import askAI
+from methods.bqb import bqb
 
 sendInterval = 5
+
 
 class MBot:
 
@@ -39,11 +41,13 @@ class MBot:
 
         async with websockets.connect(self.uri) as websocket:
             while True:
-                if(not self.msgSendQueue.empty()):
+                if not self.msgSendQueue.empty():
                     msg = self.msgSendQueue.get()
                     print(msg)
                     url = f"{self.httpURL}/send_msg"
-                    threading.Thread(target=lambda: requests.get(url=url,params=msg)).start()
+                    threading.Thread(
+                        target=lambda: requests.get(url=url, params=msg)
+                    ).start()
 
     def messageHandler(self):
         """处理消息服务"""
@@ -85,32 +89,37 @@ class MBot:
             },
         )
 
-    def handle(self,message):
+    def handle(self, message):
         """处理消息"""
         # 解析参数
         cmd = self.parseCommand(message)
-        if(cmd == None):
+        if cmd == None:
             return
         command = cmd["command"]
         arg = cmd["arg"].strip()
 
-        if (message['message_type'] == "group"):
+        if message["message_type"] == "group":
             """
             群功能
             """
             groupID = message["group_id"]
-            if(command == "/hello"):
+            if command == "/hello":
                 """群打招呼"""
                 # 判断是否是群消息
-                self.sendGroupMsg(groupID,f"[CQ:at,qq={message['user_id']}]泥嚎~")
-            elif(command == "/ai"):
-                """ai功能"""
-                ans = askAI(arg)
-                self.sendGroupMsg(groupID, ans)
-            elif(command == "/python"):
-                "在线编译Pytohn"
+                self.sendGroupMsg(groupID, f"[CQ:at,qq={message['user_id']}]泥嚎~")
+            # elif(command == "/ai"):
+            #     """ai功能"""
+            #     ans = askAI(arg)
+            #     self.sendGroupMsg(groupID, ans)
+            elif command == "/python":
+                "在线编译Python"
                 ans = runPython(arg)
                 self.sendGroupMsg(groupID, ans)
+            elif command == "/bqb":
+                "在线编译Pytohn"
+                
+                ans = bqb(arg)
+                self.sendGroupMsg(groupID, f"[CQ:image,file={ans}]")
 
     def run(self):
         threading.Thread(target=lambda: asyncio.run(self.wsReceiver())).start()

@@ -1,6 +1,6 @@
 from Bot import *
 
-ip = "127.0.0.1"
+ip = "118.178.238.108"
 httpPort = "3000"
 websocketPort = "3001"
 
