@@ -1,5 +1,6 @@
 import requests
 import random
+from utils.message import *
 
 templates = [
     "1_紫色渐变",
@@ -43,9 +44,10 @@ templates = [
     "39_量子爆炸",
 ]
 
-def bqb(text: str):
 
+def getGifUrl(text: str) -> str | None:
     url = "https://wenzi.biaoqingbao999.cn/submit"
+
     data = {
         "user_text": text,
         "duration": "0.2",
@@ -55,9 +57,29 @@ def bqb(text: str):
         "line_spacing": "0.9",
         "shape": "正方形",
     }
+
     resp = requests.post(url, data=data)
-    return "https://wenzi.biaoqingbao999.cn" + resp.json()["data"]["gif_url"]
+    try:
+        return "https://wenzi.biaoqingbao999.cn" + resp.json()["data"]["gif_url"]
+    except:
+        return None
 
 
-if __name__ == "__main__":
-    print(bqb("12311"))
+def bqb(message: dict, executor) -> None:
+    # Group Only
+    if message["message_type"] != "group":
+        return
+
+    command = parseCommand(message)
+    if command == None:
+        return
+    text = command["arg"]
+    url = getGifUrl(text)
+    if url == None:
+        return
+
+    executor.sendGroupMsg(message["group_id"], f"[CQ:image,file={url}]")
+
+
+# if __name__ == "__main__":
+#     print(bqb("12311"))
