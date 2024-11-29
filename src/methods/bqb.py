@@ -1,5 +1,6 @@
 import requests
 import random
+import emoji
 from utils.message import *
 
 templates = [
@@ -45,14 +46,25 @@ templates = [
 ]
 
 
+def isContaionEmoji(text: str) -> bool:
+    for c in text:
+        if emoji.is_emoji(c):
+            return True
+    return False
+
+
 def getGifUrl(text: str) -> str | None:
     url = "https://wenzi.biaoqingbao999.cn/submit"
+    if isContaionEmoji(text):
+        font = "猫啃什锦黑.ttf"
+    else:
+        font = "Alibaba-PuHuiTi-Bold.ttf"
 
     data = {
         "user_text": text,
         "duration": "0.2",
         "max_font_size": "50",
-        "raw_font_path": "Alibaba-PuHuiTi-Bold.ttf",
+        "raw_font_path": font,
         "raw_background_dir": random.choice(templates),
         "line_spacing": "0.9",
         "shape": "正方形",

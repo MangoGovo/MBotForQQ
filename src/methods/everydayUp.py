@@ -33,13 +33,6 @@ def getQuestionPic(ques: str) -> str | None:
         return None
     return "https://www.haotiw.com" + img.attrs["src"]
 
-
-#     try:
-#         return "https://wenzi.biaoqingbao999.cn" + resp.json()["data"]["gif_url"]
-#     except:
-#         return None
-
-
 def everydayUp(message: dict, executor) -> None:
     # Group Only
     if message["message_type"] != "group":
